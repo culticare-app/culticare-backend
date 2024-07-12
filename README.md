@@ -24,12 +24,12 @@
 
 
 ### 커밋 타입
-  - [태그] 설명 형식으로 커밋 메시지를 작성합니다.
+  - `[태그] 설명` 형식으로 커밋 메시지를 작성합니다.
   - 태그는 영어를 쓰고 대문자로 작성합니다.
 예시 >
-
+```
   [FEAT] 검색 api 추가
-  
+```  
 ### 💻 Github mangement
 소프티 들의 WorkFlow : **Gitflow Workflow**
 
@@ -44,7 +44,7 @@
   - 개발 브랜치 아래 기능별 브랜치를 만들어 작성합니다.
 
 ### ✍🏻 Code Convention
-에어비앤비 코드 컨벤션
+[에어비앤비 코드 컨벤션](https://github.com/airbnb/javascript)
 
 ### 📍 Gitflow 규칙
 - Develop에 직접적인 commit, push는 금지합니다.
@@ -62,10 +62,11 @@
  - fix/issue_number-도메인-http Method-api
  - release/version_number
  - hotfix/issue_number - Short Description
+   
 예시 >
-
+```
   feature/#3-user-post-api
-
+```
   
 ### 📋 Code Review Convention
 - P1: 꼭 반영해주세요 (Request changes)
