@@ -1,0 +1,45 @@
+package com.culticare.posts.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Posts {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
+    private Long id;
+
+    private String title;
+
+    private String content;
+
+    private Long likeCount;
+
+    private Long view;
+
+    private Long loginMemberId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Categories category;
+
+
+    @Builder
+    public Posts(String title, String content, Long likeCount, Long view, Long loginMemberId, Categories category) {
+        this.title = title;
+        this.content = content;
+        this.likeCount = likeCount;
+        this.view = view;
+        this.loginMemberId = loginMemberId;
+        this.category = category;
+    }
+
+}
