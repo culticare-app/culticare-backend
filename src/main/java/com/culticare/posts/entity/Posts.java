@@ -1,5 +1,6 @@
 package com.culticare.posts.entity;
 
+import com.culticare.posts.controller.dto.request.PostEditRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,4 +43,8 @@ public class Posts {
         this.category = category;
     }
 
+    public void updatePost(PostEditRequestDto dto) {
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
+    }
 }

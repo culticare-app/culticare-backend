@@ -3,6 +3,7 @@ package com.culticare.posts.service;
 import com.culticare.common.exception.CustomException;
 import com.culticare.common.exception.ErrorCode;
 import com.culticare.posts.controller.dto.request.PostCreateRequestDto;
+import com.culticare.posts.controller.dto.request.PostEditRequestDto;
 import com.culticare.posts.controller.dto.response.PostCreateResponseDto;
 import com.culticare.posts.controller.dto.response.PostListResponseDto;
 import com.culticare.posts.entity.Categories;
@@ -93,5 +94,30 @@ public class PostsService {
         return postListResponseDtos;
     }
 
+    @Transactional
+    public void editPost(Long loginMemberId, Long postId, PostEditRequestDto dto) {
+        Posts findPost = postsRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
+        checkEditPost(loginMemberId, findPost);
+
+        findPost.updatePost(dto);
+    }
+
+    @Transactional
+    public void deletePost(Long loginMemberId, Long postId) {
+        Posts findPost = postsRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
+
+        checkEditPost(loginMemberId, findPost);
+
+        postsRepository.deleteById(postId);
+    }
+
+    private void checkEditPost(Long loginMemberId, Posts findPost) {
+
+        if (!findPost.getLoginMemberId().equals(loginMemberId)) {
+            throw new CustomException(ErrorCode.PERMISSION_DENIED);
+        }
+    }
 }
