@@ -18,4 +18,5 @@ public class PostCreateRequestDto {
     private Long view;
     private String memberId;
     private String category;
+    private String writerName;
 }

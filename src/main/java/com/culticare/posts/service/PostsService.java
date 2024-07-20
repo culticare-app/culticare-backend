@@ -4,11 +4,15 @@ import com.culticare.common.exception.CustomException;
 import com.culticare.common.exception.ErrorCode;
 import com.culticare.posts.controller.dto.request.PostCreateRequestDto;
 import com.culticare.posts.controller.dto.request.PostEditRequestDto;
+import com.culticare.posts.controller.dto.response.MemberLikePostsResponseDto;
 import com.culticare.posts.controller.dto.response.PostCreateResponseDto;
 import com.culticare.posts.controller.dto.response.PostListResponseDto;
+import com.culticare.posts.controller.dto.response.PostResponseDto;
 import com.culticare.posts.entity.Categories;
+import com.culticare.posts.entity.MemberLikePosts;
 import com.culticare.posts.entity.Posts;
 import com.culticare.posts.repository.CategoriesRepository;
+import com.culticare.posts.repository.MemberLikePostsRepository;
 import com.culticare.posts.repository.PostsCustomRepositoryImpl;
 import com.culticare.posts.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +33,7 @@ public class PostsService {
     private final PostsRepository postsRepository;
     private final PostsCustomRepositoryImpl postsCustomRepositoryImpl;
     private final CategoriesRepository categoriesRepository;
+    private final MemberLikePostsRepository memberLikePostsRepository;
 
     @Transactional
     public Long savePost(Long loginMemberId, PostCreateRequestDto dto) {
@@ -42,16 +47,23 @@ public class PostsService {
                 .view(0L)
                 .category(category)
                 .loginMemberId(loginMemberId)
+                .writerName(dto.getWriterName())
                 .build();
 
         return post.getId();
     }
 
 
-    public PostCreateResponseDto getPost(Long postId) {
+    public PostCreateResponseDto getPost(Long loginUserId, Long postId) {
 
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
+
+        boolean isLiked = false;
+
+        if (memberLikePostsRepository.existsByMemberIdAndPost(loginUserId, findPost)) {
+            isLiked = true;
+        }
 
         return PostCreateResponseDto.builder()
                 .title(findPost.getTitle())
@@ -59,6 +71,7 @@ public class PostsService {
                 .likeCount(findPost.getLikeCount())
                 .view(findPost.getView())
                 .category(findPost.getCategory().getName())
+                .isLiked(isLiked)
                 .build();
     }
 
@@ -120,4 +133,46 @@ public class PostsService {
             throw new CustomException(ErrorCode.PERMISSION_DENIED);
         }
     }
+
+    @Transactional
+    public void likePost(Long loginUserId, Long postId) {
+
+        Posts findPost = postsRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
+
+        if (memberLikePostsRepository.existsByMemberIdAndPost(loginUserId, findPost)) {
+            throw new CustomException(ErrorCode.EXIST_USER_LIKED_POST);
+        }
+        findPost.plusLikeCount();
+
+        MemberLikePosts memberLikePosts = MemberLikePosts.builder()
+                .memberId(loginUserId)
+                .post(findPost)
+                .build();
+
+        memberLikePostsRepository.save(memberLikePosts);
+    }
+
+    public List<MemberLikePostsResponseDto> findLikeList(Long loginUserId) {
+
+        List<MemberLikePostsResponseDto> result = new ArrayList<>();
+        List<MemberLikePosts> findMemberLikePost = memberLikePostsRepository.findByMemberId(loginUserId);
+
+        for (MemberLikePosts m : findMemberLikePost) {
+            result.add(MemberLikePostsResponseDto.builder()
+                    .id(m.getId())
+                    .postId(m.getPost().getId())
+                    .title(m.getPost().getTitle())
+                    .content(m.getPost().getContent())
+                    .category(m.getPost().getCategory().getName())
+                    .view(m.getPost().getView())
+                    .likeCount(m.getPost().getLikeCount())
+                    .writerName(m.getPost().getWriterName())
+                    .build());
+        }
+
+        return result;
+    }
+
+
 }

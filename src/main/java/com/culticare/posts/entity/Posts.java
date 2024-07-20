@@ -29,23 +29,30 @@ public class Posts extends BaseTimeEntity {
 
     private Long loginMemberId;
 
+    private String writerName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Categories category;
 
 
     @Builder
-    public Posts(String title, String content, Long likeCount, Long view, Long loginMemberId, Categories category) {
+    public Posts(String title, String content, Long likeCount, Long view, Long loginMemberId, Categories category, String writerName) {
         this.title = title;
         this.content = content;
         this.likeCount = likeCount;
         this.view = view;
         this.loginMemberId = loginMemberId;
         this.category = category;
+        this.writerName = writerName;
     }
 
     public void updatePost(PostEditRequestDto dto) {
         this.title = dto.getTitle();
         this.content = dto.getContent();
+    }
+
+    public void plusLikeCount() {
+        this.likeCount += 1;
     }
 }

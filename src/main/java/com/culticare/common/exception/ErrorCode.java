@@ -57,7 +57,11 @@ public enum ErrorCode {
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "해당 카테고리가 존재하지 않습니다."),
 
     // 댓글 예외
-    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "해당 댓글이 존재하지 않습니다.");
+    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "해당 댓글이 존재하지 않습니다."),
+
+    // 좋아요 예외
+    EXIST_USER_LIKED_POST(HttpStatus.CONFLICT, "이미 존재하는 좋아요 정보입니다."),
+    NOT_FOUND_MEMBER_LIKE_POSTS(HttpStatus.NOT_FOUND, "해당 좋아요 정보가 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;
