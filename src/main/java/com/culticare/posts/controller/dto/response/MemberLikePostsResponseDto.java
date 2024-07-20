@@ -7,11 +7,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostCreateResponseDto {
+public class MemberLikePostsResponseDto {
+
+    private Long id;
+    private Long postId;
     private String title;
     private String content;
-    private Long likeCount;
-    private Long view;
     private String category;
-    private boolean isLiked;
+    private Long view;
+    private Long likeCount;
+    private String writerName;
+
 }

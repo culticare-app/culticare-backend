@@ -4,6 +4,7 @@ import com.culticare.posts.controller.dto.request.PostCreateRequestDto;
 import com.culticare.posts.controller.dto.request.PostEditRequestDto;
 import com.culticare.posts.controller.dto.response.PostCreateResponseDto;
 import com.culticare.posts.controller.dto.response.PostListResponseDto;
+import com.culticare.posts.controller.dto.response.PostResponseDto;
 import com.culticare.posts.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -64,5 +65,23 @@ public class PostsController {
         postsService.deletePost(loginMemberId, postId);
 
         return ResponseEntity.ok().build();
+    }
+
+    // 게시글 좋아요
+    @PostMapping("/like/{postId}")
+    public ResponseEntity<Void> likePost(Long loginUserId, @PathVariable("postId") Long postId) {
+
+        postsService.likePost(loginUserId, postId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    // 회원의 게시글 좋아요 목록 조회
+    @GetMapping("/like-list")
+    public ResponseEntity<List<PostResponseDto>> findLikeList(Long loginUserId) {
+
+        List<PostResponseDto> likeList = postsService.findLikeList(loginUserId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(likeList);
     }
 }

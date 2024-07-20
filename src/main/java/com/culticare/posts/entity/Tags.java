@@ -28,4 +28,8 @@ public class Tags extends BaseTimeEntity {
         this.name = name;
         this.count = count;
     }
+
+    public void plusCount() {
+        this.count += 1;
+    }
 }
