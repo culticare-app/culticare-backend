@@ -4,6 +4,7 @@ import com.culticare.posts.entity.Categories;
 import com.culticare.posts.entity.Posts;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -25,6 +26,8 @@ public class PostListResponseDto {
         private Long likeCount;
         private Long view;
         private String category;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
 
         public static PostDto from(Posts post, Categories category) {
             return PostDto.builder()
@@ -34,6 +37,8 @@ public class PostListResponseDto {
                     .likeCount(post.getLikeCount())
                     .view(post.getView())
                     .category(post.getCategory().getName())
+                    .createdAt(post.getCreatedAt())
+                    .modifiedAt(post.getModifiedAt())
                     .build();
         }
     }

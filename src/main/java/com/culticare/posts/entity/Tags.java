@@ -1,6 +1,7 @@
 package com.culticare.posts.entity;
 
 import com.culticare.BaseTimeEntity;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,16 +12,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Categories extends BaseTimeEntity {
+public class Tags extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id")
+    @Column(name = "tag_id")
     private Long id;
 
     private String name;
 
+    private Long count;
+
     @Builder
-    public Categories(String name) {
+    public Tags(String name, Long count) {
         this.name = name;
+        this.count = count;
     }
 }

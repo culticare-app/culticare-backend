@@ -1,5 +1,6 @@
-package com.culticare.posts.repository;
+package com.culticare.comments.repository;
 
+import com.culticare.comments.entity.Comments;
 import com.culticare.posts.entity.Posts;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -8,23 +9,25 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.culticare.comments.entity.QComments.comments;
 import static com.culticare.posts.entity.QPosts.posts;
 
 @Repository
 @RequiredArgsConstructor
-public class PostsCustomRepositoryImpl implements PostsCustomRepository {
+public class CommentsCustomRepositoryImpl implements CommentsCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Posts> findPostsByCategoryWithPaging(String category, Pageable pageable) {
-        List<Posts> results = queryFactory
-                .select(posts)
-                .from(posts)
+    public List<Comments> findCommentsByPostWithPaging(Posts post, Pageable pageable) {
+
+        List<Comments> results = queryFactory
+                .select(comments)
+                .from(comments)
                 .where(
-                        posts.category.name.eq(category)
+                        comments.post.eq(post)
                 )
-                .orderBy(posts.id.desc())
+                .orderBy(comments.id.desc())
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
