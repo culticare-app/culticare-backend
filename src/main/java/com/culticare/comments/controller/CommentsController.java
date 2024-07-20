@@ -40,7 +40,7 @@ public class CommentsController {
     }
 
     // 댓글 수정
-    @PutMapping("/{commentId}")
+    @PatchMapping("/{commentId}")
     public ResponseEntity<Void> edit(Long loginMemberId, @PathVariable("commentId") Long commentId, CommentEditRequestDto commentEditRequestDto) {
 
         commentsService.editComment(loginMemberId, commentId, commentEditRequestDto);
