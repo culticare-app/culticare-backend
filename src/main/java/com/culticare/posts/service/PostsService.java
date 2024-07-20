@@ -7,16 +7,9 @@ import com.culticare.posts.controller.dto.request.PostEditRequestDto;
 import com.culticare.posts.controller.dto.response.MemberLikePostsResponseDto;
 import com.culticare.posts.controller.dto.response.PostCreateResponseDto;
 import com.culticare.posts.controller.dto.response.PostListResponseDto;
-import com.culticare.posts.controller.dto.response.PostResponseDto;
-import com.culticare.posts.entity.Categories;
-import com.culticare.posts.entity.MemberLikePosts;
-import com.culticare.posts.entity.Posts;
-import com.culticare.posts.repository.CategoriesRepository;
-import com.culticare.posts.repository.MemberLikePostsRepository;
-import com.culticare.posts.repository.PostsCustomRepositoryImpl;
-import com.culticare.posts.repository.PostsRepository;
+import com.culticare.posts.entity.*;
+import com.culticare.posts.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +26,8 @@ public class PostsService {
     private final PostsRepository postsRepository;
     private final PostsCustomRepositoryImpl postsCustomRepositoryImpl;
     private final CategoriesRepository categoriesRepository;
+    private final TagRepository tagRepository;
+    private final PostsHashtagMapRepository postsHashtagMapRepository;
     private final MemberLikePostsRepository memberLikePostsRepository;
 
     @Transactional
@@ -49,6 +44,20 @@ public class PostsService {
                 .loginMemberId(loginMemberId)
                 .writerName(dto.getWriterName())
                 .build();
+
+        List<HashTag> savedTags = dto.getTagList().stream()
+                .map(t -> tagRepository.findByName(t.getName())
+                        .orElseGet(() -> tagRepository.save(HashTag.builder().name(t.getName()).count(0L).build())))
+                .collect(Collectors.toList());
+
+        for(HashTag hashtag: savedTags) {
+            PostsHashtagMap savedPostTagMap = PostsHashtagMap.builder()
+                    .post(post)
+                    .hashTag(hashtag)
+                    .build();
+
+            postsHashtagMapRepository.save(savedPostTagMap);
+        }
 
         return post.getId();
     }
@@ -124,6 +133,8 @@ public class PostsService {
 
         checkEditPost(loginMemberId, findPost);
 
+        findPost.minusLikeCount();
+
         postsRepository.deleteById(postId);
     }
 
@@ -174,5 +185,17 @@ public class PostsService {
         return result;
     }
 
+    @Transactional
+    public void deleteLike(Long loginUserId, Long postId) {
 
+        Posts findPost = postsRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
+
+        if (memberLikePostsRepository.existsByMemberIdAndPost(loginUserId, findPost)) {
+            throw new CustomException(ErrorCode.EXIST_USER_LIKED_POST);
+        }
+
+        MemberLikePosts findMemberLikePosts = memberLikePostsRepository.deleteByMemberIdAndPost(loginUserId, findPost);
+        memberLikePostsRepository.delete(findMemberLikePosts);
+    }
 }

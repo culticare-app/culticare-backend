@@ -2,6 +2,7 @@ package com.culticare.posts.controller;
 
 import com.culticare.posts.controller.dto.request.PostCreateRequestDto;
 import com.culticare.posts.controller.dto.request.PostEditRequestDto;
+import com.culticare.posts.controller.dto.response.MemberLikePostsResponseDto;
 import com.culticare.posts.controller.dto.response.PostCreateResponseDto;
 import com.culticare.posts.controller.dto.response.PostListResponseDto;
 import com.culticare.posts.controller.dto.response.PostResponseDto;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Member;
 import java.util.List;
 
 @RestController
@@ -29,7 +31,7 @@ public class PostsController {
     public ResponseEntity<PostCreateResponseDto> savePosts(Long loginMemberId, PostCreateRequestDto postCreateRequestDto) {
 
         Long savedPostId = postsService.savePost(loginMemberId, postCreateRequestDto);
-        PostCreateResponseDto postCreateResponseDto = postsService.getPost(savedPostId);
+        PostCreateResponseDto postCreateResponseDto = postsService.getPost(loginMemberId, savedPostId);
 
         return ResponseEntity.status(HttpStatus.OK).body(postCreateResponseDto);
     }
@@ -42,9 +44,9 @@ public class PostsController {
 
     // 게시글 개별 조회
     @GetMapping("/{postId}")
-    public ResponseEntity<PostCreateResponseDto> findById(@PathVariable("postId") Long postId) {
+    public ResponseEntity<PostCreateResponseDto> findById(Long loginUserId, @PathVariable("postId") Long postId) {
 
-        PostCreateResponseDto postResponseDto = postsService.getPost(postId);
+        PostCreateResponseDto postResponseDto = postsService.getPost(loginUserId, postId);
 
         return ResponseEntity.status(HttpStatus.OK).body(postResponseDto);
     }
@@ -78,10 +80,26 @@ public class PostsController {
 
     // 회원의 게시글 좋아요 목록 조회
     @GetMapping("/like-list")
-    public ResponseEntity<List<PostResponseDto>> findLikeList(Long loginUserId) {
+    public ResponseEntity<List<MemberLikePostsResponseDto>> findLikeList(Long loginUserId) {
 
-        List<PostResponseDto> likeList = postsService.findLikeList(loginUserId);
+        List<MemberLikePostsResponseDto> likeList = postsService.findLikeList(loginUserId);
 
         return ResponseEntity.status(HttpStatus.OK).body(likeList);
     }
+
+    // 회원의 게시글 좋아요 삭제
+    @DeleteMapping("/like/{postId}")
+    public ResponseEntity<Void> deleteLikePost(Long loginUserId, @PathVariable("postId") Long postId) {
+
+        postsService.deleteLike(loginUserId, postId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    //
+
+
+    //
+
+
 }
