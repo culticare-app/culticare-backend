@@ -1,4 +1,4 @@
-package com.culticare.posts.entity;
+package com.culticare.comments.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -11,22 +11,20 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QPosts is a Querydsl query type for Posts
+ * QComments is a Querydsl query type for Comments
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QPosts extends EntityPathBase<Posts> {
+public class QComments extends EntityPathBase<Comments> {
 
-    private static final long serialVersionUID = -1371500450L;
+    private static final long serialVersionUID = -1001969728L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QPosts posts = new QPosts("posts");
+    public static final QComments comments = new QComments("comments");
 
     public final com.culticare.QBaseTimeEntity _super = new com.culticare.QBaseTimeEntity(this);
 
-    public final QCategories category;
-
-    public final StringPath content = createString("content");
+    public final StringPath comment = createString("comment");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -40,29 +38,27 @@ public class QPosts extends EntityPathBase<Posts> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
-    public final StringPath title = createString("title");
+    public final com.culticare.posts.entity.QPosts post;
 
-    public final NumberPath<Long> view = createNumber("view", Long.class);
-
-    public QPosts(String variable) {
-        this(Posts.class, forVariable(variable), INITS);
+    public QComments(String variable) {
+        this(Comments.class, forVariable(variable), INITS);
     }
 
-    public QPosts(Path<? extends Posts> path) {
+    public QComments(Path<? extends Comments> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QPosts(PathMetadata metadata) {
+    public QComments(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QPosts(PathMetadata metadata, PathInits inits) {
-        this(Posts.class, metadata, inits);
+    public QComments(PathMetadata metadata, PathInits inits) {
+        this(Comments.class, metadata, inits);
     }
 
-    public QPosts(Class<? extends Posts> type, PathMetadata metadata, PathInits inits) {
+    public QComments(Class<? extends Comments> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.category = inits.isInitialized("category") ? new QCategories(forProperty("category")) : null;
+        this.post = inits.isInitialized("post") ? new com.culticare.posts.entity.QPosts(forProperty("post"), inits.get("post")) : null;
     }
 
 }

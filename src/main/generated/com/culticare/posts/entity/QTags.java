@@ -10,16 +10,18 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QCategories is a Querydsl query type for Categories
+ * QTags is a Querydsl query type for Tags
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QCategories extends EntityPathBase<Categories> {
+public class QTags extends EntityPathBase<Tags> {
 
-    private static final long serialVersionUID = 1354977393L;
+    private static final long serialVersionUID = -1429609938L;
 
-    public static final QCategories categories = new QCategories("categories");
+    public static final QTags tags = new QTags("tags");
 
     public final com.culticare.QBaseTimeEntity _super = new com.culticare.QBaseTimeEntity(this);
+
+    public final NumberPath<Long> count = createNumber("count", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -31,16 +33,16 @@ public class QCategories extends EntityPathBase<Categories> {
 
     public final StringPath name = createString("name");
 
-    public QCategories(String variable) {
-        super(Categories.class, forVariable(variable));
+    public QTags(String variable) {
+        super(Tags.class, forVariable(variable));
     }
 
-    public QCategories(Path<? extends Categories> path) {
+    public QTags(Path<? extends Tags> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QCategories(PathMetadata metadata) {
-        super(Categories.class, metadata);
+    public QTags(PathMetadata metadata) {
+        super(Tags.class, metadata);
     }
 
 }

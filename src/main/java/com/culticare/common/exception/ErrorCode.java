@@ -54,7 +54,10 @@ public enum ErrorCode {
     NOT_FOUND_POST(HttpStatus.NOT_FOUND, "해당 게시글이 존재하지 않습니다."),
 
     // 카테고리 예외
-    NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "해당 카테고리가 존재하지 않습니다.");
+    NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "해당 카테고리가 존재하지 않습니다."),
+
+    // 댓글 예외
+    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "해당 댓글이 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;

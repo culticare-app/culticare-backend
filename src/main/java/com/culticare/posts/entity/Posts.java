@@ -1,5 +1,6 @@
 package com.culticare.posts.entity;
 
+import com.culticare.BaseTimeEntity;
 import com.culticare.posts.controller.dto.request.PostEditRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Posts {
+public class Posts extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
