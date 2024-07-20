@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Tags extends BaseTimeEntity {
+public class Tag extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Tags extends BaseTimeEntity {
     private Long count;
 
     @Builder
-    public Tags(String name, Long count) {
+    public Tag(String name, Long count) {
         this.name = name;
         this.count = count;
     }

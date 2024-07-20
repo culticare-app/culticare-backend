@@ -14,4 +14,6 @@ public interface MemberLikePostsRepository extends JpaRepository<MemberLikePosts
     boolean existsByMemberIdAndPost(Long memberId, Posts post);
 
     List<MemberLikePosts> findByMemberId(Long loginUserId);
+
+    MemberLikePosts deleteByMemberIdAndPost(Long loginUserId, Posts findPost);
 }
