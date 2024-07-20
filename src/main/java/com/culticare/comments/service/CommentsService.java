@@ -1,6 +1,7 @@
 package com.culticare.comments.service;
 
 import com.culticare.comments.controller.dto.request.CommentCreateRequestDto;
+import com.culticare.comments.controller.dto.request.CommentEditRequestDto;
 import com.culticare.comments.controller.dto.response.CommentCreateResponseDto;
 import com.culticare.comments.controller.dto.response.CommentsListResponseDto;
 import com.culticare.comments.entity.Comments;
@@ -79,14 +80,41 @@ public class CommentsService {
     }
 
     public CommentCreateResponseDto getCommentById(Long commentId) {
-        Comments comment = commentsRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+        Comments findComment = commentsRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
 
         return CommentCreateResponseDto.builder()
-                .id(comment.getLoginMemberId())
-                .createdAt(comment.getCreatedAt())
-                .modifiedAt(comment.getModifiedAt())
-                .content(comment.getContent())
-                .likeCount(comment.getLikeCount())
+                .id(findComment.getLoginMemberId())
+                .createdAt(findComment.getCreatedAt())
+                .modifiedAt(findComment.getModifiedAt())
+                .content(findComment.getContent())
+                .likeCount(findComment.getLikeCount())
                 .build();
+    }
+
+    @Transactional
+    public void editComment(Long loginMemberId, Long commentId, CommentEditRequestDto dto) {
+
+        Comments findComment = commentsRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+
+        checkEditComment(loginMemberId, findComment);
+
+        findComment.updateComment(dto.getContent());
+    }
+
+    @Transactional
+    public void deleteComment(Long loginMemberId, Long commentId) {
+
+        Comments findComment = commentsRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+
+        checkEditComment(loginMemberId, findComment);
+
+        commentsRepository.delete(findComment);
+    }
+
+    private void checkEditComment(Long loginMemberId, Comments findComment) {
+
+        if (!findComment.getLoginMemberId().equals(loginMemberId)) {
+            throw new CustomException(ErrorCode.PERMISSION_DENIED);
+        }
     }
 }
