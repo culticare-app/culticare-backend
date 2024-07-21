@@ -65,4 +65,8 @@ public class Posts extends BaseTimeEntity {
     public void minusLikeCount() {
         this.likeCount -= 1;
     }
+
+    public void countUpView() {
+        this.view += 1;
+    }
 }

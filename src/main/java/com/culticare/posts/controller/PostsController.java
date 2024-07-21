@@ -6,6 +6,9 @@ import com.culticare.posts.controller.dto.response.MemberLikePostsResponseDto;
 import com.culticare.posts.controller.dto.response.PostCreateResponseDto;
 import com.culticare.posts.controller.dto.response.PostListResponseDto;
 import com.culticare.posts.service.PostsService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,8 +46,9 @@ public class PostsController {
 
     // 게시글 개별 조회
     @GetMapping("/{postId}")
-    public ResponseEntity<PostCreateResponseDto> findById(@RequestHeader("memberId") Long loginMemberId, @PathVariable("postId") Long postId) {
+    public ResponseEntity<PostCreateResponseDto> findById(@RequestHeader("memberId") Long loginMemberId, @PathVariable("postId") Long postId, HttpServletRequest req, HttpServletResponse res) {
 
+        countUpView(postId, req, res);
         PostCreateResponseDto postResponseDto = postsService.getPost(loginMemberId, postId);
 
         return ResponseEntity.status(HttpStatus.OK).body(postResponseDto);
@@ -98,7 +102,38 @@ public class PostsController {
     //
 
 
-    //
+    //========
 
+    // 게시글 조회수 증가 쿠키 사용해 구현
+    private void countUpView(Long postId, HttpServletRequest req, HttpServletResponse res) {
+
+        Cookie oldCookie = null;
+
+        Cookie[] cookies = req.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("postView")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+
+        if (oldCookie != null) {
+            if (!oldCookie.getValue().contains("[" + postId.toString() + "]")) {
+                postsService.countUpView(postId);
+                oldCookie.setValue(oldCookie.getValue() + "_[" + postId + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24);
+                res.addCookie(oldCookie);
+            }
+        } else {
+            postsService.countUpView(postId);
+            Cookie newCookie = new Cookie("boardView","[" + postId + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24);
+            res.addCookie(newCookie);
+        }
+    }
 
 }

@@ -211,4 +211,13 @@ public class PostsService {
         MemberLikePosts findMemberLikePosts = memberLikePostsRepository.deleteByMemberIdAndPost(loginUserId, findPost);
         memberLikePostsRepository.delete(findMemberLikePosts);
     }
+
+    @Transactional
+    public void countUpView(Long postId) {
+
+        Posts findPost = postsRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
+
+        findPost.countUpView();
+    }
 }
