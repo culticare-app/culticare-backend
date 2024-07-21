@@ -1,10 +1,10 @@
 package com.culticare.posts.controller.dto.request;
 
-import com.culticare.posts.entity.Categories;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 @Getter
 @Setter
@@ -19,4 +19,20 @@ public class PostCreateRequestDto {
     private String memberId;
     private String category;
     private String writerName;
+    private String tags;
+
+    public List<TagListRequestDto> getTagList() {
+        List<TagListRequestDto> tagList = new ArrayList<>();
+        StringTokenizer st = new StringTokenizer(tags.replaceAll(" ",""), "#");
+
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken();
+
+            if (!token.isEmpty()) {
+                tagList.add(TagListRequestDto.of(token));
+            }
+        }
+
+        return tagList;
+    }
 }

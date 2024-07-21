@@ -44,6 +44,8 @@ public class QPosts extends EntityPathBase<Posts> {
 
     public final NumberPath<Long> view = createNumber("view", Long.class);
 
+    public final StringPath writerName = createString("writerName");
+
     public QPosts(String variable) {
         this(Posts.class, forVariable(variable), INITS);
     }

@@ -28,6 +28,8 @@ public class PostListResponseDto {
         private String category;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+        private String writerName;
+        private String tags;
 
         public static PostDto from(Posts post, Categories category) {
             return PostDto.builder()
@@ -39,6 +41,7 @@ public class PostListResponseDto {
                     .category(post.getCategory().getName())
                     .createdAt(post.getCreatedAt())
                     .modifiedAt(post.getModifiedAt())
+                    .writerName(post.getWriterName())
                     .build();
         }
     }

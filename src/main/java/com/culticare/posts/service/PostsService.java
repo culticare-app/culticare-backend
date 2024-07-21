@@ -45,21 +45,23 @@ public class PostsService {
                 .writerName(dto.getWriterName())
                 .build();
 
+        Posts savedPost = postsRepository.save(post);
+
         List<HashTag> savedTags = dto.getTagList().stream()
                 .map(t -> tagRepository.findByName(t.getName())
                         .orElseGet(() -> tagRepository.save(HashTag.builder().name(t.getName()).count(0L).build())))
                 .collect(Collectors.toList());
 
-        for(HashTag hashtag: savedTags) {
-            PostsHashtagMap savedPostTagMap = PostsHashtagMap.builder()
-                    .post(post)
-                    .hashTag(hashtag)
-                    .build();
+        for (HashTag hashtag: savedTags) {
+            PostsHashtagMap savedPostTagMap = new PostsHashtagMap();
+
+            savedPostTagMap.setPost(savedPost);
+            savedPostTagMap.setHashTag(hashtag);
 
             postsHashtagMapRepository.save(savedPostTagMap);
         }
 
-        return post.getId();
+        return savedPost.getId();
     }
 
 
@@ -109,7 +111,17 @@ public class PostsService {
         List<PostListResponseDto.PostDto> postListResponseDtos = new ArrayList<>();
 
         for (Posts post : postsList) {
+
             PostListResponseDto.PostDto postListResponseDto = PostListResponseDto.PostDto.from(post, post.getCategory());
+
+            StringBuffer tagList = new StringBuffer();
+
+            for (PostsHashtagMap p : post.getPostsHashtagMaps()) {
+                tagList.append("#");
+                tagList.append(p.getHashTag().getName());
+            }
+            postListResponseDto.setTags(tagList.toString());
+
             postListResponseDtos.add(postListResponseDto);
         }
 
@@ -154,6 +166,7 @@ public class PostsService {
         if (memberLikePostsRepository.existsByMemberIdAndPost(loginUserId, findPost)) {
             throw new CustomException(ErrorCode.EXIST_USER_LIKED_POST);
         }
+
         findPost.plusLikeCount();
 
         MemberLikePosts memberLikePosts = MemberLikePosts.builder()

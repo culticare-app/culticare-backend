@@ -7,6 +7,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TagListDto {
+public class TagListRequestDto {
+    private String name;
 
+    public static TagListRequestDto of(String name) {
+        return new TagListRequestDto(name);
+    }
 }

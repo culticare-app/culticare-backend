@@ -24,7 +24,7 @@ public class QComments extends EntityPathBase<Comments> {
 
     public final com.culticare.QBaseTimeEntity _super = new com.culticare.QBaseTimeEntity(this);
 
-    public final StringPath comment = createString("comment");
+    public final StringPath content = createString("content");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
