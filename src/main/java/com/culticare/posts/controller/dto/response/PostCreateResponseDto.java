@@ -14,4 +14,5 @@ public class PostCreateResponseDto {
     private Long view;
     private String category;
     private boolean isLiked;
+    private String writerName;
 }

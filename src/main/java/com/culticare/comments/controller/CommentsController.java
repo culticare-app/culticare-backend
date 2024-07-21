@@ -22,7 +22,7 @@ public class CommentsController {
 
     // 댓글 생성
     @PostMapping("/new/{postId}")
-    public ResponseEntity<CommentCreateResponseDto> saveComments(Long loginMemberId, @PathVariable("postId") Long postId, CommentCreateRequestDto commentCreateRequestDto) {
+    public ResponseEntity<CommentCreateResponseDto> saveComments(@RequestHeader("memberId") Long loginMemberId, @PathVariable("postId") Long postId, CommentCreateRequestDto commentCreateRequestDto) {
 
         Long savedCommentId = commentsService.saveComments(loginMemberId, postId, commentCreateRequestDto);
         CommentCreateResponseDto commentCreateResponseDto = commentsService.getCommentById(savedCommentId);
@@ -41,7 +41,7 @@ public class CommentsController {
 
     // 댓글 수정
     @PatchMapping("/{commentId}")
-    public ResponseEntity<Void> edit(Long loginMemberId, @PathVariable("commentId") Long commentId, CommentEditRequestDto commentEditRequestDto) {
+    public ResponseEntity<Void> edit(@RequestHeader("memberId") Long loginMemberId, @PathVariable("commentId") Long commentId, CommentEditRequestDto commentEditRequestDto) {
 
         commentsService.editComment(loginMemberId, commentId, commentEditRequestDto);
 
@@ -50,7 +50,7 @@ public class CommentsController {
 
     // 댓글 삭제
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(Long loginMemberId, @PathVariable("commentId") Long commentId) {
+    public ResponseEntity<Void> deleteComment(@RequestHeader("memberId") Long loginMemberId, @PathVariable("commentId") Long commentId) {
 
         commentsService.deleteComment(loginMemberId, commentId);
 

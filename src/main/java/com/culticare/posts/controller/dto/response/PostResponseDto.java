@@ -18,5 +18,5 @@ public class PostResponseDto {
     private String category;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private String writername;
+    private String writerName;
 }

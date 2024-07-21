@@ -39,6 +39,7 @@ public class CommentsService {
                 .post(findPost)
                 .loginMemberId(loginMemberId)
                 .build();
+
         return commentsRepository.save(comment).getId();
     }
 

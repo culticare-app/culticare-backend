@@ -1,18 +1,20 @@
 package com.culticare.posts.entity;
 
 import com.culticare.BaseTimeEntity;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Tag extends BaseTimeEntity {
+public class HashTag extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +25,11 @@ public class Tag extends BaseTimeEntity {
 
     private Long count;
 
+    @OneToMany(mappedBy = "hashtag")
+    private List<PostsHashtagMap> postsHashtagMaps = new ArrayList<>();
+
     @Builder
-    public Tag(String name, Long count) {
+    public HashTag(String name, Long count) {
         this.name = name;
         this.count = count;
     }
