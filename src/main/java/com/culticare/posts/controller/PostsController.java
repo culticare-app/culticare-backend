@@ -21,16 +21,16 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Member;
 import java.util.List;
 
-@RestController
-@RequiredArgsConstructor
 @RequestMapping("/posts")
+@RequiredArgsConstructor
+@RestController
 public class PostsController {
 
     private final PostsService postsService;
 
     // 게시글 등록
     @PostMapping("/new")
-    public ResponseEntity<PostCreateResponseDto> savePosts(@RequestHeader("memberId") Long loginMemberId, PostCreateRequestDto postCreateRequestDto) {
+    public ResponseEntity<PostCreateResponseDto> savePosts(@RequestHeader("memberId") Long loginMemberId, @RequestBody PostCreateRequestDto postCreateRequestDto) {
 
         Long savedPostId = postsService.savePost(loginMemberId, postCreateRequestDto);
         PostCreateResponseDto postCreateResponseDto = postsService.getPost(loginMemberId, savedPostId);
@@ -56,7 +56,7 @@ public class PostsController {
 
     // 게시글 수정
     @PatchMapping("/edit/{postId}")
-    public ResponseEntity<Void> editPost(@RequestHeader("memberId") Long loginMemberId, @PathVariable("postId") Long postId, PostEditRequestDto postEditRequestDto) {
+    public ResponseEntity<Void> editPost(@RequestHeader("memberId") Long loginMemberId, @PathVariable("postId") Long postId, @RequestBody PostEditRequestDto postEditRequestDto) {
 
         postsService.editPost(loginMemberId, postId, postEditRequestDto);
 
@@ -98,10 +98,7 @@ public class PostsController {
 
         return ResponseEntity.ok().build();
     }
-
-    //
-
-
+    
     //========
 
     // 게시글 조회수 증가 쿠키 사용해 구현
