@@ -38,7 +38,7 @@ public class Posts extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Categories category;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostsHashtagMap> postsHashtagMaps = new ArrayList<>();
 
 

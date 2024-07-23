@@ -204,11 +204,13 @@ public class PostsService {
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
-        if (memberLikePostsRepository.existsByMemberIdAndPost(loginUserId, findPost)) {
-            throw new CustomException(ErrorCode.EXIST_USER_LIKED_POST);
+        if (!memberLikePostsRepository.existsByMemberIdAndPost(loginUserId, findPost)) {
+            throw new CustomException(ErrorCode.NOT_FOUND_MEMBER_LIKE_POSTS);
         }
 
-        MemberLikePosts findMemberLikePosts = memberLikePostsRepository.deleteByMemberIdAndPost(loginUserId, findPost);
+        MemberLikePosts findMemberLikePosts = memberLikePostsRepository.findByMemberIdAndPost(loginUserId, findPost)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_LIKE_POSTS));
+
         memberLikePostsRepository.delete(findMemberLikePosts);
     }
 

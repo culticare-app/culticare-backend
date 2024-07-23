@@ -15,5 +15,6 @@ public interface MemberLikePostsRepository extends JpaRepository<MemberLikePosts
 
     List<MemberLikePosts> findByMemberId(Long loginUserId);
 
-    MemberLikePosts deleteByMemberIdAndPost(Long loginUserId, Posts findPost);
+    Optional<MemberLikePosts> findByMemberIdAndPost(Long loginUserId, Posts findPost);
+
 }
