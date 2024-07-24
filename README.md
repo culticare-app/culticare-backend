@@ -32,7 +32,7 @@
   [FEAT] 검색 api 추가
 ```  
 ### 💻 Github mangement
-소프티 들의 WorkFlow : **Gitflow Workflow**
+WorkFlow : **Gitflow Workflow**
 
   - Develop, Feature, Hotfix 브랜치
 
