@@ -25,7 +25,7 @@ public class HashTag extends BaseTimeEntity {
 
     private Long count;
 
-    @OneToMany(mappedBy = "hashtag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hashTag", cascade = CascadeType.ALL)
     private List<PostsHashtagMap> postsHashtagMaps = new ArrayList<>();
 
     @Builder

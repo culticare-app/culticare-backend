@@ -100,6 +100,8 @@ public class PostsService {
                 .category(findPost.getCategory().getName())
                 .isLiked(isLiked)
                 .tags(tagList.toString())
+                .createdAt(findPost.getCreatedAt())
+                .modifiedAt(findPost.getModifiedAt())
                 .build();
     }
 
@@ -209,6 +211,8 @@ public class PostsService {
                     .view(m.getPost().getView())
                     .likeCount(m.getPost().getLikeCount())
                     .writerName(m.getPost().getWriterName())
+                    .createdAt(m.getPost().getCreatedAt())
+                    .modifiedAt(m.getPost().getModifiedAt())
                     .build());
         }
 

@@ -18,6 +18,7 @@ public class PostsCustomRepositoryImpl implements PostsCustomRepository {
 
     @Override
     public List<Posts> findPostsByCategoryWithPaging(String category, Pageable pageable) {
+
         List<Posts> results = queryFactory
                 .select(posts)
                 .from(posts)

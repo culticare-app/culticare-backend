@@ -40,6 +40,8 @@ public class QPosts extends EntityPathBase<Posts> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
+    public final ListPath<PostsHashtagMap, QPostsHashtagMap> postsHashtagMaps = this.<PostsHashtagMap, QPostsHashtagMap>createList("postsHashtagMaps", PostsHashtagMap.class, QPostsHashtagMap.class, PathInits.DIRECT2);
+
     public final StringPath title = createString("title");
 
     public final NumberPath<Long> view = createNumber("view", Long.class);

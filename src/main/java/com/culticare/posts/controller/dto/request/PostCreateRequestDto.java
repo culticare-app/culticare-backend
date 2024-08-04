@@ -14,9 +14,6 @@ import java.util.StringTokenizer;
 public class PostCreateRequestDto {
     private String title;
     private String content;
-    private Long likeCount;
-    private Long view;
-    private String memberId;
     private String category;
     private String writerName;
     private String tags;
