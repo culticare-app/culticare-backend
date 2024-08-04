@@ -31,6 +31,15 @@ public class PostsService {
     private final MemberLikePostsRepository memberLikePostsRepository;
 
     @Transactional
+    public void saveCategories(String category) {
+        Categories categories = Categories.builder()
+                .name(category)
+                .build();
+
+        categoriesRepository.save(categories);
+    }
+
+    @Transactional
     public Long savePost(Long loginMemberId, PostCreateRequestDto dto) {
 
         Categories category = categoriesRepository.findByName(dto.getCategory()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY));
@@ -76,6 +85,13 @@ public class PostsService {
             isLiked = true;
         }
 
+        StringBuffer tagList = new StringBuffer();
+
+        for (PostsHashtagMap p : findPost.getPostsHashtagMaps()) {
+            tagList.append("#");
+            tagList.append(p.getHashTag().getName());
+        }
+
         return PostCreateResponseDto.builder()
                 .title(findPost.getTitle())
                 .content(findPost.getContent())
@@ -83,6 +99,7 @@ public class PostsService {
                 .view(findPost.getView())
                 .category(findPost.getCategory().getName())
                 .isLiked(isLiked)
+                .tags(tagList.toString())
                 .build();
     }
 
