@@ -2,6 +2,8 @@ package com.culticare.posts.controller.dto.response;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,4 +17,7 @@ public class PostCreateResponseDto {
     private String category;
     private boolean isLiked;
     private String writerName;
+    private String tags;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 }

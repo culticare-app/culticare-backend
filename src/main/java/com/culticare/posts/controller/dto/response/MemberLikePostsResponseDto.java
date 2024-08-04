@@ -2,6 +2,8 @@ package com.culticare.posts.controller.dto.response;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,5 +19,7 @@ public class MemberLikePostsResponseDto {
     private Long view;
     private Long likeCount;
     private String writerName;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
 }

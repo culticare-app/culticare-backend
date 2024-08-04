@@ -28,6 +28,13 @@ public class PostsController {
 
     private final PostsService postsService;
 
+    // 카테고리 등록
+    @PostMapping("/save-category")
+    public ResponseEntity<Void> saveCategories(@RequestParam("category") String category) {
+        postsService.saveCategories(category);
+        return ResponseEntity.ok().build();
+    }
+
     // 게시글 등록
     @PostMapping("/new")
     public ResponseEntity<PostCreateResponseDto> savePosts(@RequestHeader("memberId") Long loginMemberId, @RequestBody PostCreateRequestDto postCreateRequestDto) {
