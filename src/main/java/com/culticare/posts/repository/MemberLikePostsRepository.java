@@ -11,10 +11,10 @@ import java.util.Optional;
 public interface MemberLikePostsRepository extends JpaRepository<MemberLikePosts, Long> {
 
 
-    boolean existsByMemberIdAndPost(Long memberId, Posts post);
+    boolean existsByMemberIdAndPost(String memberId, Posts post);
 
-    List<MemberLikePosts> findByMemberId(Long loginUserId);
+    List<MemberLikePosts> findByMemberId(String loginUserId);
 
-    Optional<MemberLikePosts> findByMemberIdAndPost(Long loginUserId, Posts findPost);
+    Optional<MemberLikePosts> findByMemberIdAndPost(String loginUserId, Posts findPost);
 
 }

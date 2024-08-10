@@ -21,14 +21,14 @@ public class MemberLikePosts {
     @Column(name = "member_like_posts_id")
     private Long id;
 
-    private Long memberId;
+    private String memberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Posts post;
 
     @Builder
-    public MemberLikePosts(Long memberId, Posts post) {
+    public MemberLikePosts(String memberId, Posts post) {
         this.memberId = memberId;
         this.post = post;
     }

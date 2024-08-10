@@ -40,7 +40,7 @@ public class PostsService {
     }
 
     @Transactional
-    public Long savePost(Long loginMemberId, PostCreateRequestDto dto) {
+    public Long savePost(String loginMemberId, PostCreateRequestDto dto) {
 
         Categories category = categoriesRepository.findByName(dto.getCategory()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY));
 
@@ -74,7 +74,7 @@ public class PostsService {
     }
 
 
-    public PostCreateResponseDto getPost(Long loginUserId, Long postId) {
+    public PostCreateResponseDto getPost(String loginUserId, Long postId) {
 
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
@@ -148,7 +148,7 @@ public class PostsService {
     }
 
     @Transactional
-    public void editPost(Long loginMemberId, Long postId, PostEditRequestDto dto) {
+    public void editPost(String loginMemberId, Long postId, PostEditRequestDto dto) {
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
@@ -158,7 +158,7 @@ public class PostsService {
     }
 
     @Transactional
-    public void deletePost(Long loginMemberId, Long postId) {
+    public void deletePost(String loginMemberId, Long postId) {
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
@@ -169,7 +169,7 @@ public class PostsService {
         postsRepository.deleteById(postId);
     }
 
-    private void checkEditPost(Long loginMemberId, Posts findPost) {
+    private void checkEditPost(String loginMemberId, Posts findPost) {
 
         if (!findPost.getLoginMemberId().equals(loginMemberId)) {
             throw new CustomException(ErrorCode.PERMISSION_DENIED);
@@ -177,7 +177,7 @@ public class PostsService {
     }
 
     @Transactional
-    public void likePost(Long loginUserId, Long postId) {
+    public void likePost(String loginUserId, Long postId) {
 
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
@@ -196,7 +196,7 @@ public class PostsService {
         memberLikePostsRepository.save(memberLikePosts);
     }
 
-    public List<MemberLikePostsResponseDto> findLikeList(Long loginUserId) {
+    public List<MemberLikePostsResponseDto> findLikeList(String loginUserId) {
 
         List<MemberLikePostsResponseDto> result = new ArrayList<>();
         List<MemberLikePosts> findMemberLikePost = memberLikePostsRepository.findByMemberId(loginUserId);
@@ -220,7 +220,7 @@ public class PostsService {
     }
 
     @Transactional
-    public void deleteLike(Long loginUserId, Long postId) {
+    public void deleteLike(String loginUserId, Long postId) {
 
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));

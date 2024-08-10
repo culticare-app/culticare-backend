@@ -30,7 +30,7 @@ public class Posts extends BaseTimeEntity {
 
     private Long view;
 
-    private Long loginMemberId;
+    private String loginMemberId;
 
     private String writerName;
 
@@ -43,7 +43,7 @@ public class Posts extends BaseTimeEntity {
 
 
     @Builder
-    public Posts(String title, String content, Long likeCount, Long view, Long loginMemberId, Categories category, String writerName) {
+    public Posts(String title, String content, Long likeCount, Long view, String loginMemberId, Categories category, String writerName) {
         this.title = title;
         this.content = content;
         this.likeCount = likeCount;

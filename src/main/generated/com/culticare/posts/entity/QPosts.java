@@ -35,7 +35,7 @@ public class QPosts extends EntityPathBase<Posts> {
 
     public final NumberPath<Long> likeCount = createNumber("likeCount", Long.class);
 
-    public final NumberPath<Long> loginMemberId = createNumber("loginMemberId", Long.class);
+    public final StringPath loginMemberId = createString("loginMemberId");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;

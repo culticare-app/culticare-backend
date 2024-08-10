@@ -24,7 +24,7 @@ public class QMemberLikePosts extends EntityPathBase<MemberLikePosts> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
+    public final StringPath memberId = createString("memberId");
 
     public final QPosts post;
 
