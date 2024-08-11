@@ -36,7 +36,7 @@ public class PostsController {
     }
 
     // 게시글 등록
-    @PostMapping("/new")
+    @PostMapping("/auth/new")
     public ResponseEntity<PostCreateResponseDto> savePosts(@RequestHeader("memberId") String loginMemberId, @RequestBody PostCreateRequestDto postCreateRequestDto) {
 
         Long savedPostId = postsService.savePost(loginMemberId, postCreateRequestDto);
@@ -52,7 +52,7 @@ public class PostsController {
     }
 
     // 게시글 개별 조회
-    @GetMapping("/{postId}")
+    @GetMapping("/auth/{postId}")
     public ResponseEntity<PostCreateResponseDto> findById(@RequestHeader("memberId") String loginMemberId, @PathVariable("postId") Long postId, HttpServletRequest req, HttpServletResponse res) {
 
         countUpView(postId, req, res);
@@ -62,7 +62,7 @@ public class PostsController {
     }
 
     // 게시글 수정
-    @PatchMapping("/edit/{postId}")
+    @PatchMapping("/auth/edit/{postId}")
     public ResponseEntity<Void> editPost(@RequestHeader("memberId") String loginMemberId, @PathVariable("postId") Long postId, @RequestBody PostEditRequestDto postEditRequestDto) {
 
         postsService.editPost(loginMemberId, postId, postEditRequestDto);
@@ -71,7 +71,7 @@ public class PostsController {
     }
 
     // 게시글 삭제
-    @DeleteMapping("/delete/{postId}")
+    @DeleteMapping("/auth/delete/{postId}")
     public ResponseEntity<Void> deletePost(@RequestHeader("memberId") String loginMemberId, @PathVariable("postId") Long postId) {
 
         postsService.deletePost(loginMemberId, postId);
@@ -80,7 +80,7 @@ public class PostsController {
     }
 
     // 게시글 좋아요
-    @PostMapping("/like/{postId}")
+    @PostMapping("/auth/like/{postId}")
     public ResponseEntity<Void> likePost(@RequestHeader("memberId") String loginMemberId, @PathVariable("postId") Long postId) {
 
         postsService.likePost(loginMemberId, postId);
@@ -89,7 +89,7 @@ public class PostsController {
     }
 
     // 회원의 게시글 좋아요 목록 조회
-    @GetMapping("/like-list")
+    @GetMapping("/auth/like-list")
     public ResponseEntity<List<MemberLikePostsResponseDto>> findLikeList(@RequestHeader("memberId") String loginMemberId) {
 
         List<MemberLikePostsResponseDto> likeList = postsService.findLikeList(loginMemberId);
@@ -98,7 +98,7 @@ public class PostsController {
     }
 
     // 회원의 게시글 좋아요 삭제
-    @DeleteMapping("/like/{postId}")
+    @DeleteMapping("/auth/like/{postId}")
     public ResponseEntity<Void> deleteLikePost(@RequestHeader("memberId") String loginMemberId, @PathVariable("postId") Long postId) {
 
         postsService.deleteLike(loginMemberId, postId);
