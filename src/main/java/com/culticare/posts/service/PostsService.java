@@ -182,10 +182,6 @@ public class PostsService {
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
-        if (memberLikePostsRepository.existsByMemberIdAndPost(loginUserId, findPost)) {
-            throw new CustomException(ErrorCode.EXIST_USER_LIKED_POST);
-        }
-
         findPost.plusLikeCount();
 
         MemberLikePosts memberLikePosts = MemberLikePosts.builder()
