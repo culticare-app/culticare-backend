@@ -24,7 +24,7 @@ public class QMemberLikePosts extends EntityPathBase<MemberLikePosts> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath memberId = createString("memberId");
+    public final com.culticare.member.entity.QMember member;
 
     public final QPosts post;
 
@@ -46,6 +46,7 @@ public class QMemberLikePosts extends EntityPathBase<MemberLikePosts> {
 
     public QMemberLikePosts(Class<? extends MemberLikePosts> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.member = inits.isInitialized("member") ? new com.culticare.member.entity.QMember(forProperty("member")) : null;
         this.post = inits.isInitialized("post") ? new QPosts(forProperty("post"), inits.get("post")) : null;
     }
 

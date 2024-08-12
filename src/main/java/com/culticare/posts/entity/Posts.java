@@ -1,12 +1,15 @@
 package com.culticare.posts.entity;
 
 import com.culticare.BaseTimeEntity;
+import com.culticare.member.entity.Member;
 import com.culticare.posts.controller.dto.request.PostEditRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +33,14 @@ public class Posts extends BaseTimeEntity {
 
     private Long view;
 
-    private String loginMemberId;
+    //private String loginMemberId;
 
     private String writerName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -43,12 +51,13 @@ public class Posts extends BaseTimeEntity {
 
 
     @Builder
-    public Posts(String title, String content, Long likeCount, Long view, String loginMemberId, Categories category, String writerName) {
+    public Posts(String title, String content, Long likeCount, Long view, Member member, Categories category, String writerName) {
         this.title = title;
         this.content = content;
         this.likeCount = likeCount;
         this.view = view;
-        this.loginMemberId = loginMemberId;
+        //this.loginMemberId = loginMemberId;
+        this.member = member;
         this.category = category;
         this.writerName = writerName;
     }

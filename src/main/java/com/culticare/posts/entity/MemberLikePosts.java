@@ -1,12 +1,14 @@
 package com.culticare.posts.entity;
 
+import com.culticare.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +23,20 @@ public class MemberLikePosts {
     @Column(name = "member_like_posts_id")
     private Long id;
 
-    private String memberId;
+//    private String memberId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Posts post;
 
     @Builder
-    public MemberLikePosts(String memberId, Posts post) {
-        this.memberId = memberId;
+    public MemberLikePosts(Member member, Posts post) {
+        this.member = member;
         this.post = post;
     }
 

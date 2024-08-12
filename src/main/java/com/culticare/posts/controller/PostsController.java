@@ -1,5 +1,6 @@
 package com.culticare.posts.controller;
 
+import com.culticare.jwt.service.dto.CustomUserDetails;
 import com.culticare.posts.controller.dto.request.PostCreateRequestDto;
 import com.culticare.posts.controller.dto.request.PostEditRequestDto;
 import com.culticare.posts.controller.dto.response.MemberLikePostsResponseDto;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Member;
@@ -37,10 +39,10 @@ public class PostsController {
 
     // 게시글 등록
     @PostMapping("/auth/new")
-    public ResponseEntity<PostCreateResponseDto> savePosts(@RequestHeader("memberId") String loginMemberId, @RequestBody PostCreateRequestDto postCreateRequestDto) {
+    public ResponseEntity<PostCreateResponseDto> savePosts(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody PostCreateRequestDto postCreateRequestDto) {
 
-        Long savedPostId = postsService.savePost(loginMemberId, postCreateRequestDto);
-        PostCreateResponseDto postCreateResponseDto = postsService.getPost(loginMemberId, savedPostId);
+        Long savedPostId = postsService.savePost(userDetails.getMember(), postCreateRequestDto);
+        PostCreateResponseDto postCreateResponseDto = postsService.getPost(userDetails.getMember(), savedPostId);
 
         return ResponseEntity.status(HttpStatus.OK).body(postCreateResponseDto);
     }
@@ -53,55 +55,55 @@ public class PostsController {
 
     // 게시글 개별 조회
     @GetMapping("/auth/{postId}")
-    public ResponseEntity<PostCreateResponseDto> findById(@RequestHeader("memberId") String loginMemberId, @PathVariable("postId") Long postId, HttpServletRequest req, HttpServletResponse res) {
+    public ResponseEntity<PostCreateResponseDto> findById(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("postId") Long postId, HttpServletRequest req, HttpServletResponse res) {
 
         countUpView(postId, req, res);
-        PostCreateResponseDto postResponseDto = postsService.getPost(loginMemberId, postId);
+        PostCreateResponseDto postResponseDto = postsService.getPost(userDetails.getMember(), postId);
 
         return ResponseEntity.status(HttpStatus.OK).body(postResponseDto);
     }
 
     // 게시글 수정
     @PatchMapping("/auth/edit/{postId}")
-    public ResponseEntity<Void> editPost(@RequestHeader("memberId") String loginMemberId, @PathVariable("postId") Long postId, @RequestBody PostEditRequestDto postEditRequestDto) {
+    public ResponseEntity<Void> editPost(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("postId") Long postId, @RequestBody PostEditRequestDto postEditRequestDto) {
 
-        postsService.editPost(loginMemberId, postId, postEditRequestDto);
+        postsService.editPost(userDetails.getMember(), postId, postEditRequestDto);
 
         return ResponseEntity.ok().build();
     }
 
     // 게시글 삭제
     @DeleteMapping("/auth/delete/{postId}")
-    public ResponseEntity<Void> deletePost(@RequestHeader("memberId") String loginMemberId, @PathVariable("postId") Long postId) {
+    public ResponseEntity<Void> deletePost(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("postId") Long postId) {
 
-        postsService.deletePost(loginMemberId, postId);
+        postsService.deletePost(userDetails.getMember(), postId);
 
         return ResponseEntity.ok().build();
     }
 
     // 게시글 좋아요
     @PostMapping("/auth/like/{postId}")
-    public ResponseEntity<Void> likePost(@RequestHeader("memberId") String loginMemberId, @PathVariable("postId") Long postId) {
+    public ResponseEntity<Void> likePost(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("postId") Long postId) {
 
-        postsService.likePost(loginMemberId, postId);
+        postsService.likePost(userDetails.getMember(), postId);
 
         return ResponseEntity.ok().build();
     }
 
     // 회원의 게시글 좋아요 목록 조회
     @GetMapping("/auth/like-list")
-    public ResponseEntity<List<MemberLikePostsResponseDto>> findLikeList(@RequestHeader("memberId") String loginMemberId) {
+    public ResponseEntity<List<MemberLikePostsResponseDto>> findLikeList(@AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        List<MemberLikePostsResponseDto> likeList = postsService.findLikeList(loginMemberId);
+        List<MemberLikePostsResponseDto> likeList = postsService.findLikeList(userDetails.getMember());
 
         return ResponseEntity.status(HttpStatus.OK).body(likeList);
     }
 
     // 회원의 게시글 좋아요 삭제
     @DeleteMapping("/auth/like/{postId}")
-    public ResponseEntity<Void> deleteLikePost(@RequestHeader("memberId") String loginMemberId, @PathVariable("postId") Long postId) {
+    public ResponseEntity<Void> deleteLikePost(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("postId") Long postId) {
 
-        postsService.deleteLike(loginMemberId, postId);
+        postsService.deleteLike(userDetails.getMember(), postId);
 
         return ResponseEntity.ok().build();
     }

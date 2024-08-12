@@ -16,7 +16,7 @@ public enum ErrorCode {
     UNAUTHORIZED_MEMBER(HttpStatus.UNAUTHORIZED, "해당 요청은 로그인이 필요합니다."),
     UNAUTHORIZED_PASSWORD(HttpStatus.UNAUTHORIZED, "패스워드가 틀립니다."),
     UNAUTHORIZED_ID(HttpStatus.UNAUTHORIZED, "아이디가 틀립니다."),
-    EXIST_USER_ID(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다."),
+    EXIST_LOGIN_ID(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다."),
     EXIST_USER_EMAIL(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
     EXIST_USER_NICKNAME(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
     EXIST_USER_PREFERRED_FACILITY(HttpStatus.CONFLICT, "이미 찜한 시설입니다."),
@@ -61,7 +61,18 @@ public enum ErrorCode {
 
     // 좋아요 예외
     EXIST_USER_LIKED_POST(HttpStatus.CONFLICT, "이미 존재하는 좋아요 정보입니다."),
-    NOT_FOUND_MEMBER_LIKE_POSTS(HttpStatus.NOT_FOUND, "해당 좋아요 정보가 존재하지 않습니다.");
+    NOT_FOUND_MEMBER_LIKE_POSTS(HttpStatus.NOT_FOUND, "해당 좋아요 정보가 존재하지 않습니다."),
+
+    // 정보 예외
+    NOT_FOUND_INFORMATION(HttpStatus.NOT_FOUND, "해당 정보가 존재하지 않습니다."),
+    EXIST_MEMBER_SCRAP_INFO(HttpStatus.CONFLICT, "이미 존재하는 스크랩 정보입니다."),
+    NOT_FOUND_MEMBER_SCRAP_INFO(HttpStatus.NOT_FOUND, "해당 스크랩 정보가 존재하지 않습니다."),
+
+    //뉴스 예외
+    NOT_FOUND_NEWS(HttpStatus.NOT_FOUND, "해당 뉴스가 존재하지 않습니다."),
+    EXIST_MEMBER_NEWS_SCRAP(HttpStatus.CONFLICT, "이미 존재하는 스크랩 정보입니다."),
+    NOT_FOUND_MEMBER_NEWS_SCRAP(HttpStatus.NOT_FOUND, "해당 스크랩 정보가 존재하지 않습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String detail;

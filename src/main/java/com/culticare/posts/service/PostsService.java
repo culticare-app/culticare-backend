@@ -2,6 +2,7 @@ package com.culticare.posts.service;
 
 import com.culticare.common.exception.CustomException;
 import com.culticare.common.exception.ErrorCode;
+import com.culticare.member.entity.Member;
 import com.culticare.posts.controller.dto.request.PostCreateRequestDto;
 import com.culticare.posts.controller.dto.request.PostEditRequestDto;
 import com.culticare.posts.controller.dto.response.MemberLikePostsResponseDto;
@@ -13,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,7 +40,7 @@ public class PostsService {
     }
 
     @Transactional
-    public Long savePost(String loginMemberId, PostCreateRequestDto dto) {
+    public Long savePost(Member member, PostCreateRequestDto dto) {
 
         Categories category = categoriesRepository.findByName(dto.getCategory()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY));
 
@@ -50,7 +50,7 @@ public class PostsService {
                 .likeCount(0L)
                 .view(0L)
                 .category(category)
-                .loginMemberId(loginMemberId)
+                .member(member)
                 .writerName(dto.getWriterName())
                 .build();
 
@@ -74,14 +74,14 @@ public class PostsService {
     }
 
 
-    public PostCreateResponseDto getPost(String loginUserId, Long postId) {
+    public PostCreateResponseDto getPost(Member member, Long postId) {
 
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         boolean isLiked = false;
 
-        if (memberLikePostsRepository.existsByMemberIdAndPost(loginUserId, findPost)) {
+        if (memberLikePostsRepository.existsByMemberAndPost(member, findPost)) {
             isLiked = true;
         }
 
@@ -148,36 +148,36 @@ public class PostsService {
     }
 
     @Transactional
-    public void editPost(String loginMemberId, Long postId, PostEditRequestDto dto) {
+    public void editPost(Member member, Long postId, PostEditRequestDto dto) {
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
-        checkEditPost(loginMemberId, findPost);
+        checkEditPost(member, findPost);
 
         findPost.updatePost(dto);
     }
 
     @Transactional
-    public void deletePost(String loginMemberId, Long postId) {
+    public void deletePost(Member member, Long postId) {
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
-        checkEditPost(loginMemberId, findPost);
+        checkEditPost(member, findPost);
 
         findPost.minusLikeCount();
 
         postsRepository.deleteById(postId);
     }
 
-    private void checkEditPost(String loginMemberId, Posts findPost) {
+    private void checkEditPost(Member member, Posts findPost) {
 
-        if (!findPost.getLoginMemberId().equals(loginMemberId)) {
+        if (!findPost.getMember().equals(member)) {
             throw new CustomException(ErrorCode.PERMISSION_DENIED);
         }
     }
 
     @Transactional
-    public void likePost(String loginUserId, Long postId) {
+    public void likePost(Member member, Long postId) {
 
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
@@ -185,17 +185,17 @@ public class PostsService {
         findPost.plusLikeCount();
 
         MemberLikePosts memberLikePosts = MemberLikePosts.builder()
-                .memberId(loginUserId)
+                .member(member)
                 .post(findPost)
                 .build();
 
         memberLikePostsRepository.save(memberLikePosts);
     }
 
-    public List<MemberLikePostsResponseDto> findLikeList(String loginUserId) {
+    public List<MemberLikePostsResponseDto> findLikeList(Member member) {
 
         List<MemberLikePostsResponseDto> result = new ArrayList<>();
-        List<MemberLikePosts> findMemberLikePost = memberLikePostsRepository.findByMemberId(loginUserId);
+        List<MemberLikePosts> findMemberLikePost = memberLikePostsRepository.findByMember(member);
 
         for (MemberLikePosts m : findMemberLikePost) {
             result.add(MemberLikePostsResponseDto.builder()
@@ -216,16 +216,16 @@ public class PostsService {
     }
 
     @Transactional
-    public void deleteLike(String loginUserId, Long postId) {
+    public void deleteLike(Member member, Long postId) {
 
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
-        if (!memberLikePostsRepository.existsByMemberIdAndPost(loginUserId, findPost)) {
+        if (!memberLikePostsRepository.existsByMemberAndPost(member, findPost)) {
             throw new CustomException(ErrorCode.NOT_FOUND_MEMBER_LIKE_POSTS);
         }
 
-        MemberLikePosts findMemberLikePosts = memberLikePostsRepository.findByMemberIdAndPost(loginUserId, findPost)
+        MemberLikePosts findMemberLikePosts = memberLikePostsRepository.findByMemberAndPost(member, findPost)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_LIKE_POSTS));
 
         memberLikePostsRepository.delete(findMemberLikePosts);

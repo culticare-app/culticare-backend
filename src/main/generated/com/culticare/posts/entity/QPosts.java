@@ -35,7 +35,7 @@ public class QPosts extends EntityPathBase<Posts> {
 
     public final NumberPath<Long> likeCount = createNumber("likeCount", Long.class);
 
-    public final StringPath loginMemberId = createString("loginMemberId");
+    public final com.culticare.member.entity.QMember member;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
@@ -67,6 +67,7 @@ public class QPosts extends EntityPathBase<Posts> {
     public QPosts(Class<? extends Posts> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.category = inits.isInitialized("category") ? new QCategories(forProperty("category")) : null;
+        this.member = inits.isInitialized("member") ? new com.culticare.member.entity.QMember(forProperty("member")) : null;
     }
 
 }

@@ -41,6 +41,18 @@ dependencies {
 	implementation 'org.hibernate.validator:hibernate-validator:7.0.2.Final' // 버전은 최신 버전으로 대체하세요
 
 	compileOnly 'org.projectlombok:lombok'
+
+	// JWT
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+	//Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//cool sms
+	implementation 'net.nurigo:sdk:4.3.0'
+
 	// database
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'

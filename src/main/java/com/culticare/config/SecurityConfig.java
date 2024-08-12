@@ -1,11 +1,20 @@
 package com.culticare.config;
 
+import com.culticare.jwt.web.CustomAccessDeniedHandler;
+import com.culticare.jwt.web.CustomAuthenticationEntryPoint;
+import com.culticare.jwt.web.JwtAuthenticationFilter;
+import com.culticare.jwt.web.JwtExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -15,34 +24,47 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
+
     private static final String[] AUTH_WHITELIST = {
             "/posts/**",
-            "/comments/**"
+            "/comments/**",
+            "/members/**",
+            "/sms-certification/**",
     };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // CSRF 비활성화
-        http.csrf(csrf -> csrf.disable());
+        http
+                .csrf((csrf) -> csrf.disable()); //csrf 보안 토큰 disable 처리
+        http    .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS))  // 토큰 기반 인증이므로 세션 사용하지 X
+                .exceptionHandling((exceptionConfig) ->
+                        exceptionConfig.authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(customAccessDeniedHandler)
+                );
+        http
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers( "/","/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers( "/","/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated()); // 그외 나머지 요청은 인증 필요
 
-        // CORS 설정
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
-        // 세션 관리 상태 없음으로 구성, Spring Security가 세션 생성 or 사용 X
-        // http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        // FormLogin, BasicHttp 비활성화
-        http.formLogin(form -> form.disable());
-        http.httpBasic(httpBasic -> httpBasic.disable());
-
-        // 권한 규칙 작성
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(AUTH_WHITELIST).permitAll()
-                .anyRequest().permitAll()
-        );
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 실행
+        http.addFilterBefore(jwtExceptionFilter, jwtAuthenticationFilter.getClass());
 
         return http.build();
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() { return PasswordEncoderFactories.createDelegatingPasswordEncoder(); }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
