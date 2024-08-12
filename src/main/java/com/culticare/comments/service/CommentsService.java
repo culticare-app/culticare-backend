@@ -9,6 +9,7 @@ import com.culticare.comments.repository.CommentsCustomRepository;
 import com.culticare.comments.repository.CommentsRepository;
 import com.culticare.common.exception.CustomException;
 import com.culticare.common.exception.ErrorCode;
+import com.culticare.member.entity.Member;
 import com.culticare.posts.entity.Posts;
 import com.culticare.posts.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class CommentsService {
     private final PostsRepository postsRepository;
 
     @Transactional
-    public Long saveComments(Long loginMemberId, Long postId, CommentCreateRequestDto dto) {
+    public Long saveComments(Member member, Long postId, CommentCreateRequestDto dto) {
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
@@ -37,7 +38,7 @@ public class CommentsService {
                 .content(dto.getContent())
                 .likeCount(0L)
                 .post(findPost)
-                .loginMemberId(loginMemberId)
+                .member(member)
                 .build();
 
         return commentsRepository.save(comment).getId();
@@ -84,7 +85,7 @@ public class CommentsService {
         Comments findComment = commentsRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
 
         return CommentCreateResponseDto.builder()
-                .id(findComment.getLoginMemberId())
+                .id(findComment.getId())
                 .createdAt(findComment.getCreatedAt())
                 .modifiedAt(findComment.getModifiedAt())
                 .content(findComment.getContent())
@@ -93,28 +94,28 @@ public class CommentsService {
     }
 
     @Transactional
-    public void editComment(Long loginMemberId, Long commentId, CommentEditRequestDto dto) {
+    public void editComment(Member member, Long commentId, CommentEditRequestDto dto) {
 
         Comments findComment = commentsRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
 
-        checkEditComment(loginMemberId, findComment);
+        checkEditComment(member, findComment);
 
         findComment.updateComment(dto.getContent());
     }
 
     @Transactional
-    public void deleteComment(Long loginMemberId, Long commentId) {
+    public void deleteComment(Member member, Long commentId) {
 
         Comments findComment = commentsRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
 
-        checkEditComment(loginMemberId, findComment);
+        checkEditComment(member, findComment);
 
         commentsRepository.delete(findComment);
     }
 
-    private void checkEditComment(Long loginMemberId, Comments findComment) {
+    private void checkEditComment(Member member, Comments findComment) {
 
-        if (!findComment.getLoginMemberId().equals(loginMemberId)) {
+        if (!findComment.getMember().equals(member)) {
             throw new CustomException(ErrorCode.PERMISSION_DENIED);
         }
     }

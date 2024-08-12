@@ -5,12 +5,14 @@ import com.culticare.comments.controller.dto.request.CommentEditRequestDto;
 import com.culticare.comments.controller.dto.response.CommentCreateResponseDto;
 import com.culticare.comments.controller.dto.response.CommentsListResponseDto;
 import com.culticare.comments.service.CommentsService;
+import com.culticare.jwt.service.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,9 +24,9 @@ public class CommentsController {
 
     // 댓글 생성
     @PostMapping("/auth/new/{postId}")
-    public ResponseEntity<CommentCreateResponseDto> saveComments(@RequestHeader("memberId") Long loginMemberId, @PathVariable("postId") Long postId, CommentCreateRequestDto commentCreateRequestDto) {
+    public ResponseEntity<CommentCreateResponseDto> saveComments(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("postId") Long postId, CommentCreateRequestDto commentCreateRequestDto) {
 
-        Long savedCommentId = commentsService.saveComments(loginMemberId, postId, commentCreateRequestDto);
+        Long savedCommentId = commentsService.saveComments(userDetails.getMember(), postId, commentCreateRequestDto);
         CommentCreateResponseDto commentCreateResponseDto = commentsService.getCommentById(savedCommentId);
 
         return ResponseEntity.status(HttpStatus.OK).body(commentCreateResponseDto);
@@ -41,18 +43,18 @@ public class CommentsController {
 
     // 댓글 수정
     @PatchMapping("/auth/{commentId}")
-    public ResponseEntity<Void> edit(@RequestHeader("memberId") Long loginMemberId, @PathVariable("commentId") Long commentId, CommentEditRequestDto commentEditRequestDto) {
+    public ResponseEntity<Void> edit(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("commentId") Long commentId, CommentEditRequestDto commentEditRequestDto) {
 
-        commentsService.editComment(loginMemberId, commentId, commentEditRequestDto);
+        commentsService.editComment(userDetails.getMember(), commentId, commentEditRequestDto);
 
         return ResponseEntity.ok().build();
     }
 
     // 댓글 삭제
     @DeleteMapping("/auth/{commentId}")
-    public ResponseEntity<Void> deleteComment(@RequestHeader("memberId") Long loginMemberId, @PathVariable("commentId") Long commentId) {
+    public ResponseEntity<Void> deleteComment(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("commentId") Long commentId) {
 
-        commentsService.deleteComment(loginMemberId, commentId);
+        commentsService.deleteComment(userDetails.getMember(), commentId);
 
         return ResponseEntity.ok().build();
     }

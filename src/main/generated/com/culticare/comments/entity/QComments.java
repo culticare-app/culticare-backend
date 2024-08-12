@@ -33,7 +33,7 @@ public class QComments extends EntityPathBase<Comments> {
 
     public final NumberPath<Long> likeCount = createNumber("likeCount", Long.class);
 
-    public final NumberPath<Long> loginMemberId = createNumber("loginMemberId", Long.class);
+    public final com.culticare.member.entity.QMember member;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
@@ -58,6 +58,7 @@ public class QComments extends EntityPathBase<Comments> {
 
     public QComments(Class<? extends Comments> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.member = inits.isInitialized("member") ? new com.culticare.member.entity.QMember(forProperty("member")) : null;
         this.post = inits.isInitialized("post") ? new com.culticare.posts.entity.QPosts(forProperty("post"), inits.get("post")) : null;
     }
 

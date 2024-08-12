@@ -1,12 +1,15 @@
 package com.culticare.comments.entity;
 
 import com.culticare.BaseTimeEntity;
+import com.culticare.member.entity.Member;
 import com.culticare.posts.entity.Posts;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @NoArgsConstructor
@@ -23,18 +26,23 @@ public class Comments extends BaseTimeEntity {
 
     private Long likeCount;
 
-    private Long loginMemberId;
+//    private Long loginMemberId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Posts post;
 
     @Builder
-    public Comments(String content, Long likeCount, Long loginMemberId, Posts post) {
+    public Comments(String content, Long likeCount, Member member, Posts post) {
 
         this.content = content;
         this.likeCount = likeCount;
-        this.loginMemberId = loginMemberId;
+        this.member = member;
         this.post = post;
     }
 
