@@ -1,6 +1,7 @@
 package com.culticare.member.controller;
 
 import com.culticare.jwt.service.JwtService;
+import com.culticare.jwt.service.dto.CustomUserDetails;
 import com.culticare.member.controller.dto.request.MemberSaveRequestDto;
 import com.culticare.member.controller.dto.response.MemberSaveResponseDto;
 import com.culticare.member.controller.dto.response.TokenResponseDto;
@@ -10,6 +11,7 @@ import com.culticare.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -72,5 +74,15 @@ public class MemberController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    // 회원가입
+    @GetMapping("/auth/member-info")
+    public ResponseEntity<MemberSaveResponseDto> getMember(@AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        MemberSaveResponseDto memberSaveResponseDto = memberService.getMember(userDetails.getMember());
+
+        return ResponseEntity.status(HttpStatus.OK).body(memberSaveResponseDto);
+    }
+
 
 }

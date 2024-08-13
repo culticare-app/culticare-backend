@@ -95,4 +95,17 @@ public class MemberService {
                 .set(accessToken, "blackList", expiration, TimeUnit.MILLISECONDS);
     }
 
+    public MemberSaveResponseDto getMember(Member member) {
+
+        MemberSaveResponseDto memberSaveResponseDto = MemberSaveResponseDto.builder()
+                .id(member.getId())
+                .loginId(member.getLoginId())
+                .name(member.getName())
+                .telephone(member.getTelephone())
+                .homeCountry(member.getHomeCountry())
+                .build();
+
+        return memberSaveResponseDto;
+    }
+
 }
