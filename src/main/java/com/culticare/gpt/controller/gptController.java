@@ -1,6 +1,7 @@
 package com.culticare.gpt.controller;
 
 
+import com.culticare.gpt.controller.dto.gptRequestDto;
 import com.culticare.gpt.controller.dto.gptResponseDto;
 import com.culticare.gpt.service.gptService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,7 +22,7 @@ public class gptController {
     }
 
     @PostMapping("/diary/gpt")
-    public ResponseEntity<gptResponseDto> getAssistantMsg(@RequestBody String msg) throws JsonProcessingException {
-        return gptService.getAssistantMsg(msg);
+    public ResponseEntity<gptResponseDto> getAssistantMsg(@RequestBody gptRequestDto requestDto) throws JsonProcessingException {
+        return gptService.getAssistantMsg(requestDto.getMsg());
     }
 }
