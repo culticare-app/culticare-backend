@@ -41,7 +41,7 @@ public class MemberController {
     }
 
     // 로그인
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<MemberLoginResponseDto> login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
 
         MemberLoginResponseDto memberLoginResponseDto = memberService.login(memberLoginRequestDto);
