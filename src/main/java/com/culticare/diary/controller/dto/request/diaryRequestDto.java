@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class diaryRequestDto {
     private String content;
-    private int depressionPercent;
 
 
     @Builder
