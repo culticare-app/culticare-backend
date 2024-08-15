@@ -7,6 +7,7 @@ import com.culticare.diary.controller.dto.response.diaryResponseDto;
 import com.culticare.diary.entity.Diary;
 import com.culticare.diary.repository.diaryRepository;
 import com.culticare.member.entity.Member;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class diaryService {
 
+
+    @Autowired
     private final diaryRepository diaryRepository;
 
     private final RestTemplate restTemplate;
