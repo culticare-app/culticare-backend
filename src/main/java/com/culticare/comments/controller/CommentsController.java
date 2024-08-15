@@ -24,7 +24,7 @@ public class CommentsController {
 
     // 댓글 생성
     @PostMapping("/auth/new/{postId}")
-    public ResponseEntity<CommentCreateResponseDto> saveComments(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("postId") Long postId, CommentCreateRequestDto commentCreateRequestDto) {
+    public ResponseEntity<CommentCreateResponseDto> saveComments(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("postId") Long postId, @RequestBody CommentCreateRequestDto commentCreateRequestDto) {
 
         Long savedCommentId = commentsService.saveComments(userDetails.getMember(), postId, commentCreateRequestDto);
         CommentCreateResponseDto commentCreateResponseDto = commentsService.getCommentById(savedCommentId);
@@ -43,7 +43,7 @@ public class CommentsController {
 
     // 댓글 수정
     @PatchMapping("/auth/{commentId}")
-    public ResponseEntity<Void> edit(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("commentId") Long commentId, CommentEditRequestDto commentEditRequestDto) {
+    public ResponseEntity<Void> edit(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("commentId") Long commentId, @RequestBody CommentEditRequestDto commentEditRequestDto) {
 
         commentsService.editComment(userDetails.getMember(), commentId, commentEditRequestDto);
 
