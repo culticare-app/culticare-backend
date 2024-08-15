@@ -13,6 +13,7 @@ import com.culticare.member.entity.Member;
 import com.culticare.posts.entity.Posts;
 import com.culticare.posts.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -33,6 +35,8 @@ public class CommentsService {
     public Long saveComments(Member member, Long postId, CommentCreateRequestDto dto) {
         Posts findPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
+
+        log.info("전달된 댓글내용 : " + dto.getContent());
 
         Comments comment = Comments.builder()
                 .content(dto.getContent())
