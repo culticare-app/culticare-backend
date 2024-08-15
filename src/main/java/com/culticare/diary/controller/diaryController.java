@@ -30,7 +30,7 @@ public class diaryController {
 
     // 일기 작성
     @PostMapping("/diary/write")
-    public ResponseEntity<diaryResponseDto> save(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody diaryRequestDto requestDto, @RequestHeader("memberId") Long loginMemberId) {
+    public ResponseEntity<diaryResponseDto> save(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody diaryRequestDto requestDto) {
         diaryResponseDto responseDto = diaryService.save(requestDto, userDetails.getMember());
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
@@ -57,5 +57,11 @@ public class diaryController {
         return ResponseEntity.ok(responseDto);
     }
 
+    // 일기 상세 조회
+    @GetMapping("/diary/{diaryId}")
+    public ResponseEntity<diaryResponseDto> findById(@PathVariable Long diaryId) {
+        diaryResponseDto responseDto = diaryService.findById(diaryId);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
 
 }

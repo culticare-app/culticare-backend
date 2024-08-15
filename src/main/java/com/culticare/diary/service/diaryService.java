@@ -55,5 +55,12 @@ public class diaryService {
         return diaries.stream().map(b -> new diaryResponseDto(b)).collect(Collectors.toList());
     }
 
+    @Transactional
+    public diaryResponseDto findById(Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일기가 없습니다."));
+        return new diaryResponseDto(diary);
+    }
+
 
 }
