@@ -105,6 +105,28 @@ public class PostsService {
                 .build();
     }
 
+    public PostListResponseDto getPostList(Pageable pageable) {
+
+        List<Posts> results = postsCustomRepositoryImpl.findAll(pageable);
+        List<PostListResponseDto.PostDto> postDtoList = transferToPostListDto(results);
+
+        boolean hasNext = false;
+
+        // 조회한 결과 개수가 요청한 페이지 사이즈보다 클 경우, next = true
+        if (postDtoList.size() > pageable.getPageSize()) {
+            hasNext = true;
+            postDtoList.remove(pageable.getPageSize());
+        }
+
+        PostListResponseDto postListResponseDto = PostListResponseDto.builder()
+                .nextPage(hasNext)
+                .posts(postDtoList)
+                .build();
+
+        return postListResponseDto;
+
+    }
+
     public PostListResponseDto getPostListByCategory(String category, Pageable pageable) {
 
         List<Posts> results = postsCustomRepositoryImpl.findPostsByCategoryWithPaging(category, pageable);
@@ -239,4 +261,5 @@ public class PostsService {
 
         findPost.countUpView();
     }
+
 }

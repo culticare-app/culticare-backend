@@ -17,6 +17,18 @@ public class PostsCustomRepositoryImpl implements PostsCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
+    public List<Posts> findAll(Pageable pageable) {
+        List<Posts> results = queryFactory
+                .select(posts)
+                .from(posts)
+                .orderBy(posts.id.desc())
+                .limit(pageable.getPageSize()+1)
+                .fetch();
+
+        return results;
+    }
+
+    @Override
     public List<Posts> findPostsByCategoryWithPaging(String category, Pageable pageable) {
 
         List<Posts> results = queryFactory

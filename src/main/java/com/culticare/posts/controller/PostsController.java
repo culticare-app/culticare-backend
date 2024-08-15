@@ -53,6 +53,12 @@ public class PostsController {
         return ResponseEntity.status(HttpStatus.OK).body(postsService.getPostListByCategory(category, pageable));
     }
 
+    // 카테고리별 게시글 목록 조회
+    @GetMapping("/list/all")
+    public ResponseEntity<PostListResponseDto> findAll(@PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(postsService.getPostList(pageable));
+    }
+
     // 게시글 개별 조회
     @GetMapping("/auth/{postId}")
     public ResponseEntity<PostCreateResponseDto> findById(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable("postId") Long postId, HttpServletRequest req, HttpServletResponse res) {
