@@ -1,6 +1,7 @@
 package com.culticare.diary.controller.dto.request;
 
 import com.culticare.diary.entity.Diary;
+import com.culticare.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,10 @@ public class diaryRequestDto {
     }
 
 
-    public Diary toEntity(Long memberId){
+    public Diary toEntity(Member member){
         return Diary.builder()
                 .content(content)
-                .memberId(memberId)
+                .member(member)
                 .build();
     }
 }

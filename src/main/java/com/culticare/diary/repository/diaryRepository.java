@@ -1,6 +1,7 @@
 package com.culticare.diary.repository;
 
 import com.culticare.diary.entity.Diary;
+import com.culticare.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,12 +15,12 @@ public interface diaryRepository extends JpaRepository<Diary,Long> {
             "where FUNCTION('YEAR', d.createdAt) = :year " +
             "and FUNCTION('MONTH', d.createdAt) = :month " +
             "and FUNCTION('DAY', d.createdAt) = :day " +
-            "and d.memberId = :memberId")
+            "and d.member = :member")
     List<Diary> findByDate(@Param("year") int year,
                            @Param("month") int month,
                            @Param("day") int day,
-                           @Param("memberId") Long memberId);
+                           @Param("member") Member member);
 
-    @Query("select d from Diary d where d.memberId = :memberId")
-    List<Diary> findByMemberId(@Param("memberId") Long memberId);
+    @Query("select d from Diary d where d.member = :member")
+    List<Diary> findByMemberId(@Param("member") Member member);
 }
