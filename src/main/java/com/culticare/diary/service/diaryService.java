@@ -7,7 +7,6 @@ import com.culticare.diary.controller.dto.response.diaryResponseDto;
 import com.culticare.diary.entity.Diary;
 import com.culticare.diary.repository.diaryRepository;
 import com.culticare.member.entity.Member;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +20,6 @@ import java.util.stream.Collectors;
 @Service
 public class diaryService {
 
-
-    @Autowired
     private final diaryRepository diaryRepository;
 
     private final RestTemplate restTemplate;
@@ -35,7 +32,7 @@ public class diaryService {
 
     @Transactional
     public diaryResponseDto save(diaryRequestDto requestDto, Member member) {
-        Diary diary = requestDto.toEntity(member);
+        Diary diary = requestDto.toEntity(member,0);
         diary = diaryRepository.save(diary);
 
         try {
@@ -62,14 +59,17 @@ public class diaryService {
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 int averageDepressionPercent = response.getBody().getAverageDepressionPercent();
                 diary.setDepressionPercent(averageDepressionPercent);
+                System.out.println("호출 성공: " + averageDepressionPercent);
             } else {
                 diary.setDepressionPercent(0);
+                System.out.println("실패: " + 0);
             }
 
             diaryRepository.save(diary);  // 우울도 값을 업데이트한 후 다시 저장
         } catch (RestClientException e) {
             diary.setDepressionPercent(0);
             diaryRepository.save(diary);  // 예외 발생 시에도 다시 저장
+
         }
 
         return new diaryResponseDto(diary);

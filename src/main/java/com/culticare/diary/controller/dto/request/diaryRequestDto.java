@@ -15,13 +15,12 @@ public class diaryRequestDto {
 
 
     @Builder
-    public diaryRequestDto(String content, int depressionPercent) {
+    public diaryRequestDto(String content) {
         this.content = content;
-        this.depressionPercent = depressionPercent;
     }
 
 
-    public Diary toEntity(Member member){
+    public Diary toEntity(Member member, int depressionPercent){
         return Diary.builder()
                 .content(content)
                 .member(member)
