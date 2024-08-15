@@ -20,7 +20,7 @@ public class diaryResponseDto {
     public diaryResponseDto(Diary entity) {
         this.id = entity.getId();
         this.content = entity.getContent();
-        this.memberId = entity.getMemberId();
+        this.memberId = entity.getMember().getId();
         this.createdAt = entity.getCreatedAt();
     }
 }

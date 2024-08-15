@@ -22,5 +22,5 @@ public interface diaryRepository extends JpaRepository<Diary,Long> {
                            @Param("member") Member member);
 
     @Query("select d from Diary d where d.member = :member")
-    List<Diary> findByMemberId(@Param("member") Member member);
+    List<Diary> findByMember(@Param("member") Member member);
 }
