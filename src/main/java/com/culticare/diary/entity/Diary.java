@@ -39,5 +39,6 @@ public class Diary extends BaseTimeEntity {
         this.member = member;
         this.depressionPercent = depressionPercent;
     }
+    
 
 }
