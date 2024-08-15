@@ -16,11 +16,14 @@ public class diaryResponseDto {
     private Long memberId;
     private LocalDateTime createdAt;
 
+    private int depressionPercent;
+
     @Builder
     public diaryResponseDto(Diary entity) {
         this.id = entity.getId();
         this.content = entity.getContent();
         this.memberId = entity.getMember().getId();
         this.createdAt = entity.getCreatedAt();
+        this.depressionPercent = entity.getDepressionPercent();
     }
 }

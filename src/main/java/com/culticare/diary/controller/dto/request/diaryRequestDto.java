@@ -11,11 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class diaryRequestDto {
     private String content;
+    private int depressionPercent;
 
 
     @Builder
-    public diaryRequestDto(String content) {
+    public diaryRequestDto(String content, int depressionPercent) {
         this.content = content;
+        this.depressionPercent = depressionPercent;
     }
 
 
@@ -23,6 +25,7 @@ public class diaryRequestDto {
         return Diary.builder()
                 .content(content)
                 .member(member)
+                .depressionPercent(depressionPercent)
                 .build();
     }
 }

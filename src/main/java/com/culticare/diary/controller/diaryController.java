@@ -24,7 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class diaryController {
 
-
     @Autowired
     private final diaryService diaryService;
 
@@ -42,7 +41,7 @@ public class diaryController {
         return ResponseEntity.ok("일기가 성공적으로 삭제되었습니다.");
     }
 
-    // 일기 전체 조회, 페이징
+    // 일기 전체 조회
     @GetMapping("/diary/view")
     public ResponseEntity<List<diaryResponseDto>> viewAll(@AuthenticationPrincipal CustomUserDetails userDetails){
         List<diaryResponseDto> diaries = diaryService.viewAll(userDetails.getMember());
