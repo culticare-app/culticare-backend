@@ -34,7 +34,9 @@ public class SecurityConfig {
             "/comments/**",
             "/members/**",
             "/sms-certification/**",
-            "/diary/**"
+            "/news/**",
+            "/diary/**",
+            "/info/**"
     };
 
     @Bean
