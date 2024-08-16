@@ -1,4 +1,5 @@
-# msa-community
+# culticare-main-app
+### culticare backend 메인 레포지토리입니다. 
 
 ### ✉️ Commit Messge Rules
 **서버** 들의 **Git Commit Message Rules**
