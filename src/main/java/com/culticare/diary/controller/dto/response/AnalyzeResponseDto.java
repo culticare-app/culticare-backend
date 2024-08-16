@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AnalyzeResponseDto {
 
-    private int averageDepressionPercent;
+    private int average_depression_percent;
 
 
     @Builder
     public AnalyzeResponseDto(int averageDepressionPercent) {
-        this.averageDepressionPercent = averageDepressionPercent;
+        this.average_depression_percent = averageDepressionPercent;
     }
 }

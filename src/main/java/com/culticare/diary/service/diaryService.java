@@ -32,14 +32,11 @@ public class diaryService {
 
     @Transactional
     public diaryResponseDto save(diaryRequestDto requestDto, Member member) {
-        Diary diary = requestDto.toEntity(member,0);
-        diary = diaryRepository.save(diary);
-
         try {
             // FastAPI로 요청 보내기
             String jsonRequest = String.format(
                     "{\"diary_id\": %d, \"user_id\": %d, \"text\": \"%s\"}",
-                    diary.getId(),  // 생성된 diaryId 사용
+                    0,
                     member.getId(),
                     requestDto.getContent().replace("\"", "\\\"")
             );
@@ -57,23 +54,27 @@ public class diaryService {
             );
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                int averageDepressionPercent = response.getBody().getAverageDepressionPercent();
-                diary.setDepressionPercent(averageDepressionPercent);
+                int averageDepressionPercent = response.getBody().getAverage_depression_percent();
+                Diary diary = requestDto.toEntity(member,averageDepressionPercent);
+                diary = diaryRepository.save(diary);
                 System.out.println("호출 성공: " + averageDepressionPercent);
+                return new diaryResponseDto(diary);
             } else {
-                diary.setDepressionPercent(0);
-                System.out.println("실패: " + 0);
+                Diary diary = requestDto.toEntity(member,0);
+                diary = diaryRepository.save(diary);
+                System.out.println("우울도 분석 실패: 0으로 설정");
+                return new diaryResponseDto(diary);
             }
-
-            diaryRepository.save(diary);  // 우울도 값을 업데이트한 후 다시 저장
         } catch (RestClientException e) {
-            diary.setDepressionPercent(0);
-            diaryRepository.save(diary);  // 예외 발생 시에도 다시 저장
-
+            Diary diary = requestDto.toEntity(member,0);
+            diary = diaryRepository.save(diary);
+            diary.setDepressionPercent(0);  // 예외 발생 시 우울도 값을 0으로 설정
+            System.out.println("우울도 분석 요청 실패: 예외 발생");
+            return new diaryResponseDto(diary);
         }
 
-        return new diaryResponseDto(diary);
     }
+
 
 
 
