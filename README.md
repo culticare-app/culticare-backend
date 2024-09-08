@@ -1,6 +1,59 @@
 # culticare-main-app
 ### culticare backend 메인 레포지토리입니다. 
 
+---
+# 👨‍👩‍👧 CultiCare
+---
+## 팀 소개
+---
+![sodapdf-converted_Page_2](https://github.com/user-attachments/assets/76ea2db2-c217-4e36-8088-f06c90760898)
+
+## 서비스 한줄 소개
+---
+#### 다문화가정 구성원이 한국사회에 잘 적응할 수 있도록 감정관리, 정보제공, 커뮤니티 기능을 제공하는 앱
+![sodapdf-converted_Page_6](https://github.com/user-attachments/assets/520a263d-107d-434d-8e68-284e8b900b1a)
+
+## 핵심 기능 - IA
+---
+![sodapdf-converted_Page_7](https://github.com/user-attachments/assets/4dfec578-e243-4afc-8be8-538b8f5cab2d)
+
+### 기능 상세
+---
+1️⃣ 정서 분석 및 말동무 상담 기능
+![sodapdf-converted_Page_8](https://github.com/user-attachments/assets/9f53c607-9e2c-4cd1-93a3-8f8a904097bb)
+2️⃣ 커뮤니티 기능
+![sodapdf-converted_Page_9](https://github.com/user-attachments/assets/d49a7d2e-9384-4383-a4fc-3ecc571ac649)
+3️⃣ 정보 조회
+![sodapdf-converted_Page_10](https://github.com/user-attachments/assets/88acbe5f-9ef3-452c-bcdf-f71c212c286c)
+4️⃣ 문화탐구 카드뉴스 제공
+![sodapdf-converted_Page_11](https://github.com/user-attachments/assets/d6707005-5b20-4a53-a370-16c5b9749091)
+
+## 🏛️ System Architecture
+---
+
+![sodapdf-converted_Page_13](https://github.com/user-attachments/assets/d5a4f70b-ee2b-41b8-a761-d02f7b123cb3)
+
+## 📜 ERD 설계도
+---
+
+![sodapdf-converted_Page_14](https://github.com/user-attachments/assets/4ffc8a5d-3a12-4a02-a235-afe59f01cfd1)
+
+## 💻 Technology
+---
+
+![sodapdf-converted_Page_12](https://github.com/user-attachments/assets/d6f87424-add5-43c5-9e93-d58264dfde0c)
+
+## 🔎 개발 방법
+---
+
+![sodapdf-converted_Page_14](https://github.com/user-attachments/assets/4ffc8a5d-3a12-4a02-a235-afe59f01cfd1)
+![sodapdf-converted_Page_15](https://github.com/user-attachments/assets/e184fa25-d351-4960-956d-e31eb718140a)
+![sodapdf-converted_Page_16](https://github.com/user-attachments/assets/a27e1133-9226-4825-8b33-93b32f5ad93b)
+
+## 🔗 시연 영상
+---
+#### [CultiCare 시연영상](https://m.youtube.com/watch?v=R7GSRKPJUSE)
+
 ### ✉️ Commit Messge Rules
 **서버** 들의 **Git Commit Message Rules**
 
