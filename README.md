@@ -42,13 +42,15 @@
 
 ## 🔎 개발 방법
 
-![sodapdf-converted_Page_14](https://github.com/user-attachments/assets/4ffc8a5d-3a12-4a02-a235-afe59f01cfd1)
 ![sodapdf-converted_Page_15](https://github.com/user-attachments/assets/e184fa25-d351-4960-956d-e31eb718140a)
 ![sodapdf-converted_Page_16](https://github.com/user-attachments/assets/a27e1133-9226-4825-8b33-93b32f5ad93b)
+![sodapdf-converted_Page_17](https://github.com/user-attachments/assets/edb1fbbe-230d-469f-900e-6157cdaa726d)
 
 ## 🔗 시연 영상
 ---
 #### [CultiCare 시연영상](https://m.youtube.com/watch?v=R7GSRKPJUSE)
+
+----
 
 ### ✉️ Commit Messge Rules
 **서버** 들의 **Git Commit Message Rules**
